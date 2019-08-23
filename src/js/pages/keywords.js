@@ -204,72 +204,65 @@ export default $(() => {
 
 				case 'π':
 
-					if ( !arithmeticSymbol && !arithmeticConstPi ) {
+					if ( !arithmeticConstPi ) {
 
-						if ( !arithmeticConstExp ) {
-							
-							firstArgument = Math.PI;
-							field.value += symbol;
+						if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol ) {
 
-							arithmeticConstPi = true;
+							if ( firstArgument === '' ) {
+								
+								firstArgument = Math.PI;
+								field.value += symbol;
 
-						}
-					
-					} else {
+								arithmeticConstPi = true;
 
-						if ( !arithmeticConstExp ) {
-							
-							lastArgument = Math.PI;
-							field.value += symbol;
-
-							arithmeticConstPi = true;
-
-						}
+							}
 						
+						} else {
+							
+							if ( lastArgument === '' ) {
+								
+								lastArgument = Math.PI;
+								field.value += symbol;
+
+								arithmeticConstPi = true;
+
+							} 
+
+						}
+
 					}
-
-					// if ( !arithmeticSymbol && field.value === '' ) {
-
-					// 	if ( !arithmeticConstPi || !arithmeticConstExp ) {
-					// 		firstArgument = Math.PI;
-					// 		field.value += symbol;
-
-					// 		arithmeticConstPi = true;
-					// 	} 
-
-					// } else {
-
-					// 	if ( !arithmeticConstPi || !arithmeticConstExp ) {
-					// 		lastArgument = Math.PI;
-					// 		field.value += symbol;
-
-					// 		arithmeticConstPi = true;
-					// 	} 
-
-					// }
 
 					break;
 
 				case 'e':
 
-					if ( !arithmeticSymbol && field.value === '' ) {
+					if ( !arithmeticConstExp ) {
 
-						if ( !arithmeticConstPi || !arithmeticConstExp ) {
-							firstArgument = Math.E;
-							field.value += symbol;
+						if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol ) {
 
-							arithmeticConstExp = true;
-						} 
+							if ( firstArgument === '' ) {
 
-					} else {
+								
+								firstArgument = Math.E;
+								field.value += symbol;
 
-						if ( !arithmeticConstPi || !arithmeticConstExp ) {
-							lastArgument = Math.E;
-							field.value += symbol;
+								arithmeticConstExp = true;
 
-							arithmeticConstExp = true;
-						} 
+							} 
+						
+						} else {
+							
+							if ( lastArgument === '' ) {
 
+							
+								lastArgument = Math.E;
+								field.value += symbol;
+
+								arithmeticConstExp = true;
+
+							} 
+
+						}
 					}
 
 					break;
@@ -348,7 +341,7 @@ export default $(() => {
 						
 					// }
 
-					if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol) {
+					if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol ) {
 
 						firstArgument === "" ? firstArgument = symbol : firstArgument += symbol;
 						field.value += symbol;
