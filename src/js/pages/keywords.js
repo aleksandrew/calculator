@@ -204,7 +204,7 @@ export default $(() => {
 
 				case 'π':
 
-					if ( !arithmeticConstPi ) {
+					if ( !arithmeticResult && !arithmeticConstPi ) {
 
 						if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol ) {
 
@@ -236,7 +236,7 @@ export default $(() => {
 
 				case 'e':
 
-					if ( !arithmeticConstExp ) {
+					if ( !arithmeticResult && !arithmeticConstExp ) {
 
 						if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol ) {
 
@@ -323,33 +323,23 @@ export default $(() => {
 
 					}
 
-					// if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol ) {
-
-					// 	if ( arithmeticConstExp || arithmeticConstPi ) {
-
-					// 		e.preventDefault
-
-					// 	}
-
-					// } else {
-						
-					// 	if ( arithmeticConstExp || arithmeticConstPi ) {
-
-					// 		e.preventDefault;
-
-					// 	}
-						
-					// }
-
 					if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol ) {
 
-						firstArgument === "" ? firstArgument = symbol : firstArgument += symbol;
-						field.value += symbol;
+						if ( firstArgument !== Math.PI || firstArgument !== Math.E ) {
+							
+							firstArgument === "" ? firstArgument = symbol : firstArgument += symbol;
+							field.value += symbol;
+						
+						}
 						
 					} else {
 						
-						lastArgument === "" ? lastArgument = symbol : lastArgument += symbol;
-						field.value += symbol;
+						if ( firstArgument !== Math.PI || firstArgument !== Math.E ) {
+	
+							lastArgument === "" ? lastArgument = symbol : lastArgument += symbol;
+							field.value += symbol;
+							
+						}
 
 					}
 			}
