@@ -323,24 +323,39 @@ export default $(() => {
 
 					}
 
-					if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol ) {
+					if ( !arithmeticSymbol && firstArgument === Math.PI && lastArgument === '' ) {
+						
+						arithmeticSymbol = '*';
+						field.value += ' * ';
 
-						if ( firstArgument !== Math.PI || firstArgument !== Math.E ) {
-							
-							firstArgument === "" ? firstArgument = symbol : firstArgument += symbol;
-							field.value += symbol;
+					}
+
+					if ( !arithmeticSymbol && firstArgument === Math.E && lastArgument === '' ) {
 						
-						}
+						arithmeticSymbol = '*';
+						field.value += ' * ';
+
+					}
+
+					if ( !arithmeticSymbol ) {
+
+						firstArgument === "" ? firstArgument = symbol : firstArgument += symbol;
+						field.value += symbol;
 						
+					} else if ( firstArgument === Math.PI || firstArgument === Math.E ) {
+						
+						lastArgument === "" ? lastArgument = symbol : lastArgument += symbol;
+						field.value += symbol;
+
 					} else {
-						
-						if ( firstArgument !== Math.PI || firstArgument !== Math.E ) {
-	
+
+						if ( lastArgument !== Math.PI && lastArgument !== Math.E ) {
+
 							lastArgument === "" ? lastArgument = symbol : lastArgument += symbol;
 							field.value += symbol;
-							
+						
 						}
-
+							
 					}
 			}
 		}
