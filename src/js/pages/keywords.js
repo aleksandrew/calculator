@@ -270,28 +270,73 @@ export default $(() => {
 				case 'BS':
 					let oldArr = field.value.split('');
 
-					if( oldArr.includes(arithmeticSymbol, -2) ) {
-						let removeArithmeticSymbol = oldArr.splice(-3);
-						arithmeticSymbol = '';
+					if ( oldArr.includes(arithmeticSymbol, -2) ) {
 
-						field.value = oldArr.join('');
-					} 
-					else if ( lastArgument === '' ) {
-						let firstArgumentArr = firstArgument.split('');
+						if ( arithmeticSymbol === '√' && firstArgument === '2' ) {
 
-						let removeLastSymbolField = oldArr.pop();
-						let removeLastSymbolArgument = firstArgumentArr.pop();
+							firstArgument = '';
+							field.value = '';
 
-						field.value = oldArr.join('');
-						firstArgument = firstArgumentArr.join('');
+							arithmeticSymbol = false;
+
+						} else {
+							
+							let removeArithmeticSymbol = oldArr.splice(-3);
+							arithmeticSymbol = false;
+							
+							field.value = oldArr.join('');
+	
+						}
+
+					} else if ( lastArgument === '' ) {
+						
+						if ( firstArgument === Math.PI || firstArgument === Math.E ) {
+							
+							firstArgument = '';
+							field.value = '';
+
+							arithmeticConstExp = false; 
+							arithmeticConstPi = false; 
+
+						} else {
+
+							let firstArgumentArr = firstArgument.split('');
+							
+							let removeLastSymbolField = oldArr.pop();
+							let removeLastSymbolArgument = firstArgumentArr.pop();
+							
+							field.value = oldArr.join('');
+							firstArgument = firstArgumentArr.join('');
+						}
+						
 					} else {
-						let lastArgumentArr = lastArgument.split('');
+						
+						if ( lastArgument === Math.PI || lastArgument === Math.E ) {
+							
+							lastArgument = '';
+							
+							let lastArgumentArr = lastArgument.split('');
+							
+							let removeLastSymbolField = oldArr.pop();
+						
+							field.value = oldArr.join('');
+							lastArgument = lastArgumentArr.join('');
 
-						let removeLastSymbolField = oldArr.pop();
-						let removeLastSymbolArgument = lastArgumentArr.pop();
+							arithmeticConstExp = false; 
+							arithmeticConstPi = false; 
 
-						field.value = oldArr.join('');
-						lastArgument = lastArgumentArr.join('');
+						} else {
+
+							let lastArgumentArr = lastArgument.split('');
+							
+							let removeLastSymbolField = oldArr.pop();
+							let removeLastSymbolArgument = lastArgumentArr.pop();
+						
+							field.value = oldArr.join('');
+							lastArgument = lastArgumentArr.join('');
+
+						}
+
 					}
 				
 					break;
