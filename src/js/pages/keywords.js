@@ -11,6 +11,7 @@ export default $(() => {
 	let arithmeticResult = false;
 	let arithmeticConstPi = false;
 	let arithmeticConstExp = false;
+	let arithmeticPercent = false;
 
 	controlPanel.addEventListener('click', pressKey);
 
@@ -199,10 +200,26 @@ export default $(() => {
 					arithmeticResult = false;
 					arithmeticConstExp = false;
 					arithmeticConstPi = false;
+					arithmeticPercent = false;
 
 					break;
 
 				case 'π':
+					
+					if ( arithmeticResult ) {
+
+						field.value = symbol;
+						firstArgument = Math.PI;
+						lastArgument = '';
+						
+						arithmeticConstPi = true;
+
+						arithmeticSymbol = false;
+						arithmeticResult = false;
+						arithmeticConstExp = false;
+						arithmeticPercent = false;						
+
+					}
 
 					if ( !arithmeticResult && !arithmeticConstPi ) {
 
@@ -235,6 +252,21 @@ export default $(() => {
 					break;
 
 				case 'e':
+					
+					if ( arithmeticResult ) {
+
+						field.value = symbol;
+						firstArgument = Math.E;
+						lastArgument = '';
+						
+						arithmeticConstExp = true;
+
+						arithmeticSymbol = false;
+						arithmeticResult = false;
+						arithmeticConstPi = false;
+						arithmeticPercent = false;						
+
+					}
 
 					if ( !arithmeticResult && !arithmeticConstExp ) {
 
@@ -267,6 +299,38 @@ export default $(() => {
 
 					break;
 
+				case '%':
+
+					if ( !arithmeticResult && !arithmeticPercent ) {
+
+						if ( field.value.indexOf(arithmeticSymbol) === -1 || !arithmeticSymbol ) {
+
+							if ( firstArgument !== '' ) {
+
+								firstArgument = Math.floor( +firstArgument ) / 100;
+								field.value += symbol;
+								
+								arithmeticPercent = true;
+							
+							}
+
+						} else {
+							
+							if ( lastArgument !== '' ) {
+
+								lastArgument = Math.floor( +lastArgument ) / 100;
+								field.value += symbol;
+								
+								arithmeticPercent = true;
+
+							} 
+
+						}
+					
+					}
+
+					break;
+
 				case 'BS':
 					let oldArr = field.value.split('');
 
@@ -288,6 +352,27 @@ export default $(() => {
 	
 						}
 
+					} else if ( oldArr.includes('%', -1) ) {
+						
+						if ( !arithmeticSymbol ) {
+
+							let removeLastSymbolField = oldArr.pop();
+
+							firstArgument = +(firstArgument) * 100;
+							field.value = oldArr.join('');
+
+							arithmeticPercent = false;
+
+						} else {
+
+							let removeLastSymbolField = oldArr.pop();
+
+							lastArgument = +(lastArgument) * 100;
+							field.value = oldArr.join('');
+
+							arithmeticPercent = false;
+						}
+						
 					} else if ( lastArgument === '' ) {
 						
 						if ( firstArgument === Math.PI || firstArgument === Math.E ) {
@@ -343,14 +428,59 @@ export default $(() => {
 
 				case '=':
 
-					field.value = "";
-					result = arithmeticOperations(firstArgument, lastArgument, arithmeticSymbol);
-					field.value = result;
+					if ( arithmeticPercent && lastArgument === '' ) {
+					
+						result = firstArgument;
+						field.value = result;
+	
+						firstArgument = '';
+						lastArgument = '';
+						arithmeticSymbol = '';
+						arithmeticResult = true;
+						arithmeticConstExp = false;
+						arithmeticConstPi = false;
+						arithmeticPercent = false;
+					
+					} else if ( arithmeticConstPi && lastArgument === '' ) {
+					
+						result = firstArgument;
+						field.value = result;
+	
+						firstArgument = '';
+						lastArgument = '';
+						arithmeticSymbol = '';
+						arithmeticResult = true;
+						arithmeticConstExp = false;
+						arithmeticConstPi = false;
+						arithmeticPercent = false;
+					
+					} else if ( arithmeticConstExp && lastArgument === '' ) {
+					
+						result = firstArgument;
+						field.value = result;
+	
+						firstArgument = '';
+						lastArgument = '';
+						arithmeticSymbol = '';
+						arithmeticResult = true;
+						arithmeticConstExp = false;
+						arithmeticConstPi = false;
+						arithmeticPercent = false;
+					
+					} else {
 
-					firstArgument = '';
-					lastArgument = '';
-					arithmeticSymbol = '';
-					arithmeticResult = true;
+						result = arithmeticOperations(firstArgument, lastArgument, arithmeticSymbol);
+						field.value = result;
+						
+						firstArgument = '';
+						lastArgument = '';
+						arithmeticSymbol = '';
+						arithmeticResult = true;
+						arithmeticConstExp = false;
+						arithmeticConstPi = false;
+						arithmeticPercent = false;
+					
+					}
 
 					break;
 
@@ -365,6 +495,7 @@ export default $(() => {
 						arithmeticResult = false;
 						arithmeticConstExp = false;
 						arithmeticConstPi = false;
+						arithmeticPercent = false;						
 
 					}
 
@@ -382,7 +513,7 @@ export default $(() => {
 
 					}
 
-					if ( !arithmeticSymbol ) {
+					if ( !arithmeticSymbol && !arithmeticPercent ) {
 
 						firstArgument === "" ? firstArgument = symbol : firstArgument += symbol;
 						field.value += symbol;
@@ -394,7 +525,7 @@ export default $(() => {
 
 					} else {
 
-						if ( lastArgument !== Math.PI && lastArgument !== Math.E ) {
+						if ( arithmeticSymbol || !arithmeticPercent && lastArgument !== Math.PI && lastArgument !== Math.E ) {
 
 							lastArgument === "" ? lastArgument = symbol : lastArgument += symbol;
 							field.value += symbol;
@@ -409,23 +540,30 @@ export default $(() => {
 	console.log(lastArgument)
 	}
 
-	function arithmeticOperations(firstArguments, lastArgument, arithmeticSymbol) {
+	function arithmeticOperations (firstArguments, lastArgument, arithmeticSymbol) {
 		let result;
-		// debugger
+		debugger
 
 		switch (arithmeticSymbol) {
 			case '+':
+				// result = +firstArguments + +lastArgument;
+				// decimalPlace(firstArguments, lastArgument, result)
 				return result = +firstArguments + +lastArgument;
 			case '-':
+				// result = +firstArguments - +lastArgument;
 				return result = +firstArguments - +lastArgument;
 			case '*':
+				// result = +firstArguments * +lastArgument;
 				return result = +firstArguments * +lastArgument;
 			case '/':
-				return result = +firstArguments / +lastArgument;
+				// result = +firstArguments / +lastArgument;
+				return result = +firstArguments / +lastArgument; 
 			case '^':
-				return result = Math.pow(+firstArgument, +lastArgument);
+				// result = Math.pow(+firstArgument, +lastArgument);
+				return result = Math.pow(+firstArgument, +lastArgument); 
 			case '√':
-				return result = Math.pow(+lastArgument, 1/+firstArgument);
+				// result = Math.pow(+lastArgument, 1/+firstArgument);
+				return result = Math.pow(+lastArgument, 1/+firstArgument); 
 		} 
 	}
 	
@@ -445,3 +583,17 @@ export default $(() => {
 	// console.log(c.sum(2))
 	
 });
+
+// function decimalPlace (firstArguments, lastArguments, number) {
+// 	let firstArgumentPoint = firstArguments.toString().includes('.') ? firstArguments.toString().split('.').pop().length : 0;
+// 	let lastArgumentPoint = lastArguments.toString().includes('.') ? lastArguments.toString().split('.').pop().length : 0;
+
+// 	console.log(firstArgumentPoint);
+// 	console.log(lastArgumentPoint);
+
+// 	if ( firstArguments >= lastArguments ) {
+
+// 		number = 
+
+// 	}
+// }
