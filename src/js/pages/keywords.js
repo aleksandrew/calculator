@@ -3,6 +3,7 @@ import $ from 'jquery';
 export default $(() => {
 	let controlPanel = document.querySelector('.calculator__controller');
 	let field = document.querySelector('#field');
+	let historyField = document.querySelector('#historyField');
 
 	let firstArgument = '';
 	let lastArgument = '';
@@ -13,12 +14,14 @@ export default $(() => {
 	let arithmeticConstExp = false;
 	let arithmeticPercent = false;
 
+	if ( typeof localStorage.data !== "undefined") {
+		load();
+	}
+
 	controlPanel.addEventListener('click', pressKey);
 
 	function pressKey(e) {
-		let fieldValue = field.value;
 		let symbol = e.target.textContent;
-		// arithmeticOperations = true;
 		
  		if ( typeof symbol !== 'undefined' ) {
 			
@@ -426,62 +429,79 @@ export default $(() => {
 				
 					break;
 
-				case '=':
+				case '=' && '1':
 
-					if ( arithmeticPercent && lastArgument === '' ) {
-					
-						result = firstArgument;
-						field.value = result;
-	
-						firstArgument = '';
-						lastArgument = '';
-						arithmeticSymbol = '';
-						arithmeticResult = true;
-						arithmeticConstExp = false;
-						arithmeticConstPi = false;
-						arithmeticPercent = false;
-					
-					} else if ( arithmeticConstPi && lastArgument === '' ) {
-					
-						result = firstArgument;
-						field.value = result;
-	
-						firstArgument = '';
-						lastArgument = '';
-						arithmeticSymbol = '';
-						arithmeticResult = true;
-						arithmeticConstExp = false;
-						arithmeticConstPi = false;
-						arithmeticPercent = false;
-					
-					} else if ( arithmeticConstExp && lastArgument === '' ) {
-					
-						result = firstArgument;
-						field.value = result;
-	
-						firstArgument = '';
-						lastArgument = '';
-						arithmeticSymbol = '';
-						arithmeticResult = true;
-						arithmeticConstExp = false;
-						arithmeticConstPi = false;
-						arithmeticPercent = false;
-					
-					} else {
+					let randomId = parseInt( Math.random() * 10000)	
 
-						result = arithmeticOperations(firstArgument, lastArgument, arithmeticSymbol);
-						field.value = result;
-						
-						firstArgument = '';
-						lastArgument = '';
-						arithmeticSymbol = '';
-						arithmeticResult = true;
-						arithmeticConstExp = false;
-						arithmeticConstPi = false;
-						arithmeticPercent = false;
-					
+					if ( firstArgument !== '' && firstArgument === Math.PI || firstArgument === Math.E ) {
+
+						if ( arithmeticPercent && lastArgument === '' ) {
+							
+							result = firstArgument;
+							field.value = result;
+							
+							addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
+							save();
+							
+							firstArgument = '';
+							lastArgument = '';
+							arithmeticSymbol = '';
+							arithmeticResult = true;
+							arithmeticConstExp = false;
+							arithmeticConstPi = false;
+							arithmeticPercent = false;
+							
+						} else if ( arithmeticConstPi && lastArgument === '' ) {
+							
+							result = firstArgument;
+							field.value = result;
+							
+							addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
+							save();
+							
+							firstArgument = '';
+							lastArgument = '';
+							arithmeticSymbol = '';
+							arithmeticResult = true;
+							arithmeticConstExp = false;
+							arithmeticConstPi = false;
+							arithmeticPercent = false;
+							
+						} else if ( arithmeticConstExp && lastArgument === '' ) {
+							
+							result = firstArgument;
+							field.value = result;
+							
+							addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
+							save();
+							
+							firstArgument = '';
+							lastArgument = '';
+							arithmeticSymbol = '';
+							arithmeticResult = true;
+							arithmeticConstExp = false;
+							arithmeticConstPi = false;
+							arithmeticPercent = false;
+							
+						} else {
+							
+							result = arithmeticOperations(firstArgument, lastArgument, arithmeticSymbol);
+							field.value = result;
+							
+							addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
+							save();
+							
+							firstArgument = '';
+							lastArgument = '';
+							arithmeticSymbol = '';
+							arithmeticResult = true;
+							arithmeticConstExp = false;
+							arithmeticConstPi = false;
+							arithmeticPercent = false;
+							
+						}
 					}
-
+						
 					break;
 
 				default:
@@ -542,58 +562,91 @@ export default $(() => {
 
 	function arithmeticOperations (firstArguments, lastArgument, arithmeticSymbol) {
 		let result;
-		debugger
+		// debugger
 
 		switch (arithmeticSymbol) {
 			case '+':
-				// result = +firstArguments + +lastArgument;
-				// decimalPlace(firstArguments, lastArgument, result)
 				return result = +firstArguments + +lastArgument;
 			case '-':
-				// result = +firstArguments - +lastArgument;
 				return result = +firstArguments - +lastArgument;
 			case '*':
-				// result = +firstArguments * +lastArgument;
 				return result = +firstArguments * +lastArgument;
 			case '/':
-				// result = +firstArguments / +lastArgument;
 				return result = +firstArguments / +lastArgument; 
 			case '^':
-				// result = Math.pow(+firstArgument, +lastArgument);
 				return result = Math.pow(+firstArgument, +lastArgument); 
 			case '√':
-				// result = Math.pow(+lastArgument, 1/+firstArgument);
 				return result = Math.pow(+lastArgument, 1/+firstArgument); 
 		} 
+
 	}
 	
+	function addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result) {
 
-	// class Calculator {
-	// 	constructor (initial) {
-	// 		this.counter = initial;
-	// 	}
+		historyField.insertAdjacentHTML('afterbegin', 
+			`<p id="${randomId}" class="history"> 
+				<span class="operation">
+					<span class="first-argument">${firstArgument}</span> 
+					<spas class="arithmetic-symbol">${arithmeticSymbol}</spas>
+					<span class="last-argument">${lastArgument}</span>
+				</span>
+				<span>=</span>
+				<span class="result">${result}</span>
+			</p>`
+		);
 
-	// 	sum(value) {
-	// 		return this.value = this.counter + value; 
-	// 	}
-	// }
-
-	// let c = new Calculator(2);
-
-	// console.log(c.sum(2))
+	}
 	
-});
+	function save() {
+		let saveArr = [];
+		
+		for ( let i = 0; i < historyField.children.length; i++ ) {
 
-// function decimalPlace (firstArguments, lastArguments, number) {
-// 	let firstArgumentPoint = firstArguments.toString().includes('.') ? firstArguments.toString().split('.').pop().length : 0;
-// 	let lastArgumentPoint = lastArguments.toString().includes('.') ? lastArguments.toString().split('.').pop().length : 0;
+			let id = historyField.children[i].id;
+			let firstArgument = historyField.children[i].querySelector('.first-argument').textContent;
+			let arithmeticSymbol = historyField.children[i].querySelector('.arithmetic-symbol').textContent;
+			let lastArgument = historyField.children[i].querySelector('.last-argument').textContent;
+			let result = historyField.children[i].querySelector('.result').textContent;
 
-// 	console.log(firstArgumentPoint);
-// 	console.log(lastArgumentPoint);
+			let saveObj = {
+				id: id,
+				firstArgument: firstArgument,
+				arithmeticSymbol: arithmeticSymbol,
+				lastArgument: lastArgument,
+				result: result
+			};
 
-// 	if ( firstArguments >= lastArguments ) {
+			saveArr.push(saveObj);
 
-// 		number = 
+		}
 
-// 	}
+		localStorage.clear();
+		localStorage.setItem('data', JSON.stringify ({
+			data: saveArr
+		}))
+	}
+
+	function load () {
+		let obj = JSON.parse(localStorage.getItem('data'));
+
+		for ( let key in obj.data ) {
+			let id = obj.data[key].id;
+			let firstArgument = obj.data[key].firstArgument;
+			let arithmeticSymbol = obj.data[key].arithmeticSymbol;
+			let lastArgument = obj.data[key].lastArgument;
+			let result = obj.data[key].result;
+
+			addOpertion (id, firstArgument, arithmeticSymbol, lastArgument, result);
+		}
+
+	}
+
+})
+
+// let data = load ();
+
+// for ( var i = 0; i < data.addField.length; i++) {
+// 	var listItem = createElem (data.addField[i], data.addField[i].saveArr.saveObj[1].checked);
+// 	addField.appendChild(listItem);
+// 	bindTaskEvents(listItem);
 // }
