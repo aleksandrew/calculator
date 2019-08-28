@@ -289,7 +289,6 @@ export default $(() => {
 							
 							if ( lastArgument === '' ) {
 
-							
 								lastArgument = Math.E;
 								field.value += symbol;
 
@@ -335,6 +334,7 @@ export default $(() => {
 					break;
 
 				case 'BS':
+
 					let oldArr = field.value.split('');
 
 					if ( oldArr.includes(arithmeticSymbol, -2) ) {
@@ -429,11 +429,11 @@ export default $(() => {
 				
 					break;
 
-				case '=' && '1':
+				case '=':
 
 					let randomId = parseInt( Math.random() * 10000)	
 
-					if ( firstArgument !== '' && firstArgument === Math.PI || firstArgument === Math.E ) {
+					if ( firstArgument !== '' && lastArgument !== '' || firstArgument === Math.PI || firstArgument === Math.E ) {
 
 						if ( arithmeticPercent && lastArgument === '' ) {
 							
@@ -454,14 +454,15 @@ export default $(() => {
 						} else if ( arithmeticConstPi && lastArgument === '' ) {
 							
 							result = firstArgument;
-							field.value = result;
+							field.value = decimalPlace (firstArgument, lastArgument, result);
+							result = field.value;
+							arithmeticSymbol = '';
+							lastArgument = '';
 							
 							addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
 							save();
 							
 							firstArgument = '';
-							lastArgument = '';
-							arithmeticSymbol = '';
 							arithmeticResult = true;
 							arithmeticConstExp = false;
 							arithmeticConstPi = false;
@@ -470,14 +471,15 @@ export default $(() => {
 						} else if ( arithmeticConstExp && lastArgument === '' ) {
 							
 							result = firstArgument;
-							field.value = result;
+							field.value = decimalPlace (firstArgument, lastArgument, result);
+							result = field.value;
+							arithmeticSymbol = '';
+							lastArgument = '';
 							
 							addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
 							save();
 							
 							firstArgument = '';
-							lastArgument = '';
-							arithmeticSymbol = '';
 							arithmeticResult = true;
 							arithmeticConstExp = false;
 							arithmeticConstPi = false;
@@ -560,23 +562,59 @@ export default $(() => {
 	console.log(lastArgument)
 	}
 
-	function arithmeticOperations (firstArguments, lastArgument, arithmeticSymbol) {
+	function arithmeticOperations (firstArgument, lastArgument, arithmeticSymbol) {
 		let result;
 		// debugger
 
 		switch (arithmeticSymbol) {
 			case '+':
-				return result = +firstArguments + +lastArgument;
+				result = +firstArgument + +lastArgument;
+
+				if ( field.value.indexOf('.') !== -1 || field.value.indexOf('π') !== -1 || field.value.indexOf('e') !== -1 ) {
+					result = decimalPlace (firstArgument, lastArgument, result);
+				}
+
+				return result; 
 			case '-':
-				return result = +firstArguments - +lastArgument;
+				result = +firstArgument - +lastArgument
+
+				if ( field.value.indexOf('.') !== -1 || field.value.indexOf('π') !== -1 || field.value.indexOf('e') !== -1 ) {
+					result = decimalPlace (firstArgument, lastArgument, result);
+				}
+
+				return result;
 			case '*':
-				return result = +firstArguments * +lastArgument;
+				result = +firstArgument * +lastArgument;
+
+				if ( field.value.indexOf('.') !== -1 || field.value.indexOf('π') !== -1 || field.value.indexOf('e') !== -1 ) {
+					result = decimalPlace (firstArgument, lastArgument, result);
+				}
+
+				return result;
 			case '/':
-				return result = +firstArguments / +lastArgument; 
+				result = +firstArgument / +lastArgument; 
+
+				if ( field.value.indexOf('.') !== -1 || field.value.indexOf('π') !== -1 || field.value.indexOf('e') !== -1 ) {
+					result = decimalPlace (firstArgument, lastArgument, result);
+				}
+
+				return result;
 			case '^':
-				return result = Math.pow(+firstArgument, +lastArgument); 
+				result = Math.pow(+firstArgument, +lastArgument);
+
+				if ( field.value.indexOf('.') !== -1 || field.value.indexOf('π') !== -1 || field.value.indexOf('e') !== -1 ) {
+					result = decimalPlace (firstArgument, lastArgument, result);
+				}
+
+				return result;
 			case '√':
-				return result = Math.pow(+lastArgument, 1/+firstArgument); 
+				result = Math.pow(+lastArgument, 1/+firstArgument)
+
+				if ( field.value.indexOf('.') !== -1 || field.value.indexOf('π') !== -1 || field.value.indexOf('e') !== -1 ) {
+					result = decimalPlace (firstArgument, lastArgument, result);
+				}
+
+				return result;
 		} 
 
 	}
@@ -641,12 +679,28 @@ export default $(() => {
 
 	}
 
+	function decimalPlace (firstArguments, lastArguments, result) {
+		let firstArgumentPoint = firstArguments.toString().includes('.') ? firstArguments.toString().split('.').pop().length : 0;
+		let lastArgumentPoint = lastArguments.toString().includes('.') ? lastArguments.toString().split('.').pop().length : 0;
+	
+		let resultArr = result.toString().split('');
+		let resultPointPosition = result.toString().split('').indexOf('.');
+
+		if ( firstArgumentPoint > 5 ) {
+			firstArgumentPoint = 5;
+		}
+
+		if ( lastArgumentPoint > 5 ) {
+			lastArgumentPoint = 5;
+		}
+
+		firstArgumentPoint >= lastArgumentPoint ?	resultArr.splice(resultPointPosition+1+firstArgumentPoint) : resultArr.splice(resultPointPosition+1+lastArgumentPoint);
+
+		return resultArr.join('');
+
+		console.log(firstArgumentPoint);
+		console.log(lastArgumentPoint);
+		console.log(resultArr);
+	}
+
 })
-
-// let data = load ();
-
-// for ( var i = 0; i < data.addField.length; i++) {
-// 	var listItem = createElem (data.addField[i], data.addField[i].saveArr.saveObj[1].checked);
-// 	addField.appendChild(listItem);
-// 	bindTaskEvents(listItem);
-// }
