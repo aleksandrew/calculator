@@ -1,6 +1,6 @@
 <section class="calculator h-100 d-flex flex-column align-items-center"> 
 	<div class="calculator__field w-100 mt-20 mb-50">
-		<input type="text" id="field" class="field">
+		<input type="text" id="field" class="field" disabled>
 	</div>
 	<div class="calculator__controller d-flex flex-row align-items-center">
 		<table class="controller-number">
@@ -96,6 +96,9 @@
 				</tr>
 			</tbody>
 		</table>
+	</div>
+	<div class="calculator__btn-clear align-self-end">
+		<div id="clearBtn" class="btn btn--clear">clear field</div>
 	</div>
 	<div id="historyField" class="calculator__history justify-content-beetwen flex-row align-items-center text-center">
 		<!-- <p class="history"> 
