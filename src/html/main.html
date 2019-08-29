@@ -1,19 +1,19 @@
 <section class="calculator h-100 d-flex flex-column align-items-center"> 
-	<div class="calculator__field w-100 mt-20 mb-50">
+	<div class="calculator__field w-100 mt-10 mt-sm-20 mb-25 mb-sm-50">
 		<input type="text" id="field" class="field" disabled>
 	</div>
-	<div class="calculator__controller d-flex flex-row align-items-center">
-		<table class="controller-number">
+	<div class="calculator__controller d-flex flex-column flex-sm-row align-items-sm-center mb-20 mb-sm-20">
+		<table class="controller-number order-2 order-sm-1">
 			<tbody class="controller-number__body">
 				<tr>
 					<td>
-						<div class="btn">7</div>
+						<div class="btn">1</div>
 					</td>
 					<td>
-						<div class="btn">8</div>
+						<div class="btn">2</div>
 					</td>
 					<td>
-						<div class="btn">9</div>
+						<div class="btn">3</div> 
 					</td>
 				</tr>
 				<tr>
@@ -29,21 +29,23 @@
 				</tr>
 				<tr>
 					<td>
-						<div class="btn">1</div>
+						<div class="btn">7</div> 
 					</td>
 					<td>
-						<div class="btn">2</div>
+						<div class="btn">8</div> 
 					</td>
 					<td>
-						<div class="btn">3</div>
+						<div class="btn">9</div>  
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<div class="btn">BS</div>
+						<div class="btn d-flex d-sm-none">0</div>
+						<div class="btn d-none d-sm-flex">BS</div>
 					</td>
 					<td>
-						<div class="btn">0</div>
+						<div class="btn d-flex d-sm-none">.</div>
+						<div class="btn d-none d-sm-flex">0</div>
 					</td>
 					<td>
 						<div class="btn">=</div>
@@ -51,42 +53,60 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="controller-logic">
+		<table class="controller-logic order-1 order-sm-2">
 			<tbody class="controller-logic__body">
 				<tr>
-					<td>
+					<td class="d-table-cell d-sm-none" colspan="2" >
+						<div class="btn">C</div> 
+					</td>
+					<td class="d-none d-sm-table-cell">
 						<div class="btn">+</div>
 					</td>
 					<td>
-						<div class="btn">π</div>
+						<div class="btn d-flex d-sm-none">√</div>
+						<div class="btn d-none d-sm-flex">π</div>
 					</td>
 					<td>
-						<div class="btn">e</div>
+						<div class="btn d-flex d-sm-none">BS</div>
+						<div class="btn d-none d-sm-flex">e</div>
 					</td>
 				</tr>
 				<tr>
+					<td class="d-sm-none">
+						<div class="btn">e</div>
+					</td>
 					<td>
-						<div class="btn">-</div>
+						<div class="btn d-flex d-sm-none">π</div>
+						<div class="btn d-none d-sm-flex">-</div>
 					</td>
 					<td>
 						<div class="btn">^</div>
 					</td>
 					<td>
-						<div class="btn">√</div>
+						<div class="btn d-flex d-sm-none">%</div>
+						<div class="btn d-none d-sm-flex">√</div>
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td class="d-sm-none">
+						<div class="btn">*</div>
+					</td>
+					<td class="d-sm-none">
 						<div class="btn">/</div>
 					</td>
 					<td>
-						<div class="btn">%</div>
+						<div class="btn d-flex d-sm-none">-</div>
+						<div class="btn d-none d-sm-flex">/</div>
 					</td>
-					<td rowspan="2" >
+					<td>
+						<div class="btn d-flex d-sm-none">+</div>
+						<div class="btn d-none d-sm-flex">%</div>
+					</td>
+					<td class="d-none d-sm-table-cell" rowspan="2" >
 						<div class="btn py-50">C</div> 
 					</td>
 				</tr>
-				<tr>
+				<tr class="d-none d-sm-table-row"> 
 					<td>
 						<div class="btn">*</div>
 					</td>
@@ -100,15 +120,5 @@
 	<div class="calculator__btn-clear align-self-end">
 		<div id="clearBtn" class="btn btn--clear">clear field</div>
 	</div>
-	<div id="historyField" class="calculator__history justify-content-beetwen flex-row align-items-center text-center">
-		<!-- <p class="history"> 
-			<span class="operation">
-				<span class="first-argument">01</span> 
-				<span class="arithmetic-symbol">+</span>
-				<span class="last-argument">10</span>
-			</span>
-			<span>=</span>
-			<span class="result">11</span>
-		</p> -->
-	</div>
+	<div id="historyField" class="calculator__history justify-content-beetwen flex-row align-items-center text-center"></div>
 </section>

@@ -20,7 +20,7 @@ export default $(() => {
 	}
 
 	if ( historyField.children.length > 0 ) {
-		clearBtn.setAttribute('style', 'display: flex')
+		clearBtn.setAttribute('style', 'display: flex; font-size: 1.1rem;	width: 50px;')
 	}
 
 	controlPanel.addEventListener('click', clickKey);
@@ -689,7 +689,7 @@ export default $(() => {
 					}
 
 					if ( historyField.children.length > 0 ) {
-						clearBtn.setAttribute('style', 'display: flex')
+						clearBtn.setAttribute('style', 'display: flex; font-size: 1.1rem;	width: 50px;');
 					}
 						
 					break;
