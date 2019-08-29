@@ -4,6 +4,7 @@ export default $(() => {
 	let controlPanel = document.querySelector('.calculator__controller');
 	let field = document.querySelector('#field');
 	let historyField = document.querySelector('#historyField');
+	let clearBtn = document.querySelector('#clearBtn');
 
 	let firstArgument = '';
 	let lastArgument = '';
@@ -18,8 +19,27 @@ export default $(() => {
 		load();
 	}
 
+	if ( historyField.children.length > 0 ) {
+		clearBtn.setAttribute('style', 'display: flex')
+	}
+
 	controlPanel.addEventListener('click', clickKey);
 	window.addEventListener('keydown', pressKey);
+	historyField.addEventListener('click', addOldResult);
+	clearBtn.addEventListener('click', clearResult);
+
+	function clearResult() {
+		let child = historyField.children;
+		let childrenLength = child.length; 
+
+		clearBtn.removeAttribute('style');
+
+		localStorage.clear();
+		
+		for (let i = 0; i < childrenLength; i++ ) {
+			historyField.removeChild(child[0]);
+		}
+	}
 
 	function clickKey(e) {
 		let symbol = e.target.textContent;
@@ -82,6 +102,36 @@ export default $(() => {
 
 		viewModel(symbol);
 	}
+
+	function addOldResult(e) {
+		let operation = e.target;
+
+		console.log(operation)
+		
+		if ( operation.classList.contains('operation') || operation.parentElement.classList.contains('operation') ) {
+			
+			if ( operation.parentElement.classList.contains('operation') ) {
+
+				operation = operation.parentElement;
+
+			}
+			
+			firstArgument = operation.querySelector('.first-argument').textContent;
+			arithmeticSymbol = operation.querySelector('.arithmetic-symbol').textContent;
+			lastArgument = operation.querySelector('.last-argument').textContent;
+
+			field.value = `${firstArgument} ${arithmeticSymbol} ${lastArgument}`;
+		
+		}
+
+		if ( operation.classList.contains('result') ) {
+			
+			firstArgument = operation.textContent;
+
+			field.value = `${firstArgument}`;
+		
+		}
+	}
 	
 	function viewModel(symbol) {
 		
@@ -90,6 +140,24 @@ export default $(() => {
 			switch (symbol) {
 
 				case '+':
+
+					if ( arithmeticSymbol && lastArgument !== '' ) {
+						
+						result = arithmeticOperations(firstArgument, lastArgument, arithmeticSymbol);
+						field.value = result;
+						
+						addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
+						save();
+						
+						firstArgument = '';
+						lastArgument = '';
+						arithmeticSymbol = '';
+						arithmeticResult = true;
+						arithmeticConstExp = false;
+						arithmeticConstPi = false;
+						arithmeticPercent = false;
+
+					}
 
 					if ( !arithmeticSymbol ) {
 
@@ -110,6 +178,24 @@ export default $(() => {
 					break;
 
 				case '-':
+
+					if ( arithmeticSymbol && lastArgument !== '' ) {
+						
+						result = arithmeticOperations(firstArgument, lastArgument, arithmeticSymbol);
+						field.value = result;
+						
+						addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
+						save();
+						
+						firstArgument = '';
+						lastArgument = '';
+						arithmeticSymbol = '';
+						arithmeticResult = true;
+						arithmeticConstExp = false;
+						arithmeticConstPi = false;
+						arithmeticPercent = false;
+
+					}
 					
 					if ( firstArgument === '' && !arithmeticResult ) {
 						firstArgument += '-';
@@ -141,6 +227,24 @@ export default $(() => {
 						
 				case '*':
 
+					if ( arithmeticSymbol && lastArgument !== '' ) {
+						
+						result = arithmeticOperations(firstArgument, lastArgument, arithmeticSymbol);
+						field.value = result;
+						
+						addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
+						save();
+						
+						firstArgument = '';
+						lastArgument = '';
+						arithmeticSymbol = '';
+						arithmeticResult = true;
+						arithmeticConstExp = false;
+						arithmeticConstPi = false;
+						arithmeticPercent = false;
+
+					}
+
 					if ( !arithmeticSymbol ) {
 					
 						if ( arithmeticResult ) {
@@ -160,6 +264,24 @@ export default $(() => {
 					break;
 
 				case '/':
+
+					if ( arithmeticSymbol && lastArgument !== '' ) {
+						
+						result = arithmeticOperations(firstArgument, lastArgument, arithmeticSymbol);
+						field.value = result;
+						
+						addOpertion (randomId, firstArgument, arithmeticSymbol, lastArgument, result);
+						save();
+						
+						firstArgument = '';
+						lastArgument = '';
+						arithmeticSymbol = '';
+						arithmeticResult = true;
+						arithmeticConstExp = false;
+						arithmeticConstPi = false;
+						arithmeticPercent = false;
+
+					}
 
 					if ( !arithmeticSymbol ) {
 					
@@ -493,7 +615,7 @@ export default $(() => {
 
 				case '=':
 
-					let randomId = parseInt( Math.random() * 10000)	
+					let randomId = parseInt( Math.random() * 10000);
 
 					if ( firstArgument !== '' && lastArgument !== '' || firstArgument === Math.PI || firstArgument === Math.E ) {
 
@@ -564,6 +686,10 @@ export default $(() => {
 							arithmeticPercent = false;
 							
 						}
+					}
+
+					if ( historyField.children.length > 0 ) {
+						clearBtn.setAttribute('style', 'display: flex')
 					}
 						
 					break;
@@ -685,13 +811,13 @@ export default $(() => {
 
 		historyField.insertAdjacentHTML('afterbegin', 
 			`<p id="${randomId}" class="history"> 
-				<span class="operation">
+				<span class="operation btn--hover">
 					<span class="first-argument">${firstArgument}</span> 
 					<spas class="arithmetic-symbol">${arithmeticSymbol}</spas>
 					<span class="last-argument">${lastArgument}</span>
 				</span>
 				<span>=</span>
-				<span class="result">${result}</span>
+				<span class="result btn--hover">${result}</span>
 			</p>`
 		);
 
@@ -728,8 +854,9 @@ export default $(() => {
 
 	function load () {
 		let obj = JSON.parse(localStorage.getItem('data'));
+		let key = obj.data.length - 1;
 
-		for ( let key in obj.data ) {
+		for ( let i = 0; i <= key; key-- ) {
 			let id = obj.data[key].id;
 			let firstArgument = obj.data[key].firstArgument;
 			let arithmeticSymbol = obj.data[key].arithmeticSymbol;
